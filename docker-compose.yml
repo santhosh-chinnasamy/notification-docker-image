@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  app:
+    image: notification_base:v0.1
+    build:
+      context: .
+      # restart: always
+    command: bundle exec rails s -p 4040 -b '0.0.0.0'
+    network_mode: host
+    ports:
+      - "4040:4040"
+    pid: host
+    volumes:
+      - .:/app
+    working_dir: "/app"
+    env_file:
+      - ".env"
+  sidekiq:
+    build:
+      context: .
+    # restart: always
+    command: bundle exec sidekiq -c 1
+    network_mode: host
+    pid: host
+    volumes:
+      - .:/app
+    working_dir: "/app"
+    env_file:
+      - ".env"
